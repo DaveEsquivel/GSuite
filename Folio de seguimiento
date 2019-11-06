@@ -1,0 +1,38 @@
+function sequenceNumberOnFormSubmit(e) {
+	// Call the function that generates the sequence number
+    var record = addSequenceNumber();
+
+	var timestamp = e.values[0];
+	var name = e.values[1];
+	var mail = e.values[2];
+	
+	var subject = "Solicitud numero " + "SCHR0" + record;
+
+	var plain_email_body = "Hola " + name + "!" +
+					"\n\n" + 
+					"Hemos registrado tu solicitud, enviada a " + timestamp +
+					"\n\n" + 
+					"Para seguir el estatus, pregunta por la solicitud numero " + record;
+	var html_body =  "Hola " + name + "!" + 
+					"<br/><br/>" + 
+					"Hemos registrado tu solicitud, enviada a <i>" + timestamp + "</i>" +
+					"<br/><br/>" + 
+					"Para seguir el estatus, pregunta por la solicitud numero <font color=\"red\"><strong>" + "SCHR0"+ record + "</strong></font>";
+
+	var advancedOpts = { name: "Forms - David Esquivel", htmlBody: html_body };
+	MailApp.sendEmail(mail, subject, plain_email_body, advancedOpts);
+}
+
+function addSequenceNumber() {
+	// Obtain the sheet where we save the answers
+	var sheet = SpreadsheetApp.getActiveSheet();
+  // Obtain the last row with data
+	var row =  SpreadsheetApp.getActiveSheet().getLastRow();
+	// Sequence number (record) minus 1, this is due to the headers
+	var record = row - 1;
+	// Set (or write) the sequence number in the cell specified, change number 4 for the rigth column
+	sheet.getRange(row,4).setValue("SCHR0"+record);
+	// Return the sequence number
+	return record;
+}
+
